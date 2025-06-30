@@ -30,6 +30,7 @@ vol_bar = 400
 
 while True:
     suc, img = cap.read()
+    img = cv2.flip(img, 1)
     img = detector.find_hands(img)
     lm_list = detector.find_pos(img,draw=False)
 

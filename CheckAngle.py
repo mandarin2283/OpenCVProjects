@@ -43,6 +43,7 @@ def is_bent(base,joint,tip):
 
 while True:
     suc, img = cap.read()
+    img = cv2.flip(img,1)
     img = detector.find_hands(img)
     lm_list = detector.find_pos(img,draw=True)
     if len(lm_list)!=0:

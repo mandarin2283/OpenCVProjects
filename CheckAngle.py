@@ -45,7 +45,7 @@ while True:
     suc, img = cap.read()
     img = cv2.flip(img,1)
     img = detector.find_hands(img)
-    lm_list = detector.find_pos(img,draw=True)
+    lm_list = detector.find_pos(img,text=True,draw=False)
     if len(lm_list)!=0:
         for finger_index, tip_id in enumerate(tip_ids):
             base_id = base_ids[finger_index]

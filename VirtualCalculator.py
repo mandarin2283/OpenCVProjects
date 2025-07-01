@@ -1,5 +1,5 @@
 import cv2
-from cvzone.HandTrackingModule import HandDetector
+import HandTrackingClass as htm
 
 
 class Button:
@@ -41,7 +41,7 @@ class Button:
 cap = cv2.VideoCapture(0)
 cap.set(3,1280)
 cap.set(4,720)
-detector = HandDetector(detectionCon=0.8,maxHands=1)
+detector = htm.HandDetector()
 
 button_values = [['7','8','9','*'],
                  ['4','5','6','-'],
@@ -51,8 +51,8 @@ button_values = [['7','8','9','*'],
 button_list = []
 for x in range(4):
     for y in range(4):
-        xpos = x*100 + 800
-        ypos = y*100 + 150
+        xpos = x*100 + 600
+        ypos = y*100 + 100
         button_list.append(Button((xpos, ypos), 100, 100,
                                   button_values[y][x]))
 
@@ -64,19 +64,19 @@ while True:
     suc, img = cap.read()
     img = cv2.flip(img,1)
 
-    hands,img = detector.findHands(img,flipType=False)
+    img = detector.find_hands(img)
 
-    cv2.rectangle(img,(800,70),(1200,170),
+    cv2.rectangle(img,(600,50),(1000,170),
                   (255,255,255),-1)
-    cv2.rectangle(img,(800,70),(1200,170),
+    cv2.rectangle(img,(600,50),(1000,170),
                   (50,50,50),3)
     for button in button_list:
         button.draw(img)
 
-    if hands:
-        lm_list = hands[0]['lmList']
-        length,info,img = detector.findDistance(lm_list[8][:2],lm_list[12][:2],img)
-        x,y,z = lm_list[8]
+        lm_list = detector.find_pos(img)
+    if len(lm_list)!=0:
+        length = detector.find_distance(lm_list[8][1:],lm_list[12][1:])
+        x,y = lm_list[8][1:]
         if length<50:
             for i,button in enumerate(button_list):
                 if button.click(x,y,img) and counter==0:
@@ -91,7 +91,7 @@ while True:
         if counter>10:
             counter = 0
 
-    cv2.putText(img, my_equation, (810,120),
+    cv2.putText(img, my_equation, (610,90),
                 cv2.FONT_HERSHEY_PLAIN,
                 3, (50, 50, 50), 3)
 

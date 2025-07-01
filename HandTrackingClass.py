@@ -1,11 +1,15 @@
+import time
+import math
+
 import cv2
 import mediapipe as mp
-import time
+
 
 
 class HandDetector():
 
-    def __init__(self,mode=False,max_hands=2,complexity=1,min_detect=0.5,min_track=0.5):
+    def __init__(self,mode=False,max_hands=2,complexity=1,
+                 min_detect=0.5,min_track=0.5):
         self.mode = mode
         self.max_hands = max_hands
         self.complexity = complexity
@@ -24,10 +28,11 @@ class HandDetector():
         if self.results.multi_hand_landmarks:
             for hand_landmarks in self.results.multi_hand_landmarks:
                 if draw:
-                    self.mpDraw.draw_landmarks(img, hand_landmarks, self.mpHands.HAND_CONNECTIONS)
+                    self.mpDraw.draw_landmarks(img, hand_landmarks,
+                                               self.mpHands.HAND_CONNECTIONS)
         return img
 
-    def find_pos(self,img,hand_no=0,draw=True):
+    def find_pos(self,img,hand_no=0,draw=True,text=False):
         lm_list = []
 
         if self.results.multi_hand_landmarks:
@@ -37,11 +42,19 @@ class HandDetector():
                 h, w, c = img.shape
                 cx, cy = int(lm.x * w), int(lm.y * h)
                 lm_list.append([id,cx,cy])
+                if text:
+                    cv2.putText(img,str(id),(cx,cy),cv2.FONT_HERSHEY_PLAIN,
+                                1.5,(0,255,0),1)
                 if draw:
-                    cv2.putText(img,str(id),(cx,cy),cv2.FONT_HERSHEY_PLAIN,1.5,(0,255,0),1)
+                    cv2.circle(img,(cx,cy),7,(0,255,0),-1)
 
         return lm_list
 
+    def find_distance(self,p1,p2):
+        x1,y1 = p1
+        x2,y2 = p2
+        length = math.hypot(x2-x1,y2-y1)
+        return length
 
 
 def main():

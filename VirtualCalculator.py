@@ -73,7 +73,8 @@ while True:
     for button in button_list:
         button.draw(img)
 
-        lm_list = detector.find_pos(img)
+    lm_list = detector.find_pos(img)
+
     if len(lm_list)!=0:
         length = detector.find_distance(lm_list[8][1:],lm_list[12][1:])
         x,y = lm_list[8][1:]

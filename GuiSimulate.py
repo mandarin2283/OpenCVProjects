@@ -1,11 +1,14 @@
+import pyautogui as gui
+
 import cv2
 
 import HandTrackingClass as htm
 
-cap = cv2.VideoCapture(0)
-detector = htm.HandDetector()
 
-pos_y = 400
+cap = cv2.VideoCapture(0)
+cap.set(3,1280)
+cap.set(4,720)
+detector = htm.HandDetector()
 
 while True:
     suc, img = cap.read()
@@ -16,10 +19,8 @@ while True:
     if len(lm_list)!=0:
         length = detector.find_distance(lm_list[4][1:],lm_list[8][1:])
 
-        if length<20:
-            pos_y -= 10
-
-    cv2.rectangle(img,(100,pos_y-200),(200,pos_y),(0,255,0),-1)
+        if length<50:
+            gui.press('space')
 
     cv2.imshow('result', img)
 

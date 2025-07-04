@@ -24,14 +24,17 @@ class Button:
     def click(self,x,y,image):
         if (self.position[0]<x<self.position[0]+self.width and
             self.position[1]<y<self.position[1]+self.height):
-                cv2.rectangle(image, self.position,
-                              (self.position[0] + self.width, self.position[1] + self.height),
-                              (255, 255, 255), -1)
-                cv2.rectangle(image, self.position,
-                              (self.position[0] + self.width, self.position[1] + self.height),
-                              (0, 0,), 3)
-                cv2.putText(image, self.value, (self.position[0] + 30, self.position[1] + 30), cv2.FONT_ITALIC, 5,
-                            (0, 0, 0), 5)
+            cv2.rectangle(image, self.position,
+                          (self.position[0] + self.width, self.position[1] + self.height),
+                          (255, 255, 255), -1)
+            cv2.rectangle(image, self.position,
+                          (self.position[0] + self.width, self.position[1] + self.height),
+                          (0, 0,), 3)
+            cv2.putText(image, self.value, (self.position[0] + 30, self.position[1] + 30),
+                        cv2.FONT_ITALIC,5,(0, 0, 0), 5)
+            return True
+        else:
+            return False
 
 
 cap = cv2.VideoCapture(0)
@@ -43,6 +46,9 @@ button_values = [
     ['q','e','t'],
     ['w','r','y'],
 ]
+
+my_equation = ''
+counter = 0
 
 button_list = []
 for x in range(3):
@@ -58,6 +64,9 @@ while True:
     img = detector.find_hands(img)
     lm_list = detector.find_pos(img)
 
+    cv2.rectangle(img,(300,220),(600,300),(255,255,255),-1)
+    cv2.rectangle(img, (300, 250), (600, 300), (0,0,0), 4)
+
     for button in button_list:
         button.draw(img)
 
@@ -67,9 +76,17 @@ while True:
 
         if length<50:
             for button in button_list:
-                button.click(x,y,img)
+                if button.click(x,y,img) and counter==0:
+                    my_equation += button.value
+                    counter = 1
 
+    if counter != 0:
+        counter += 1
+        if counter > 10:
+            counter = 0
 
+    cv2.putText(img, my_equation,(315,270),cv2.FONT_ITALIC,3,
+                (0,0,0),2)
 
     cv2.imshow('result', img)
 

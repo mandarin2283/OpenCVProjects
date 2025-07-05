@@ -40,9 +40,9 @@ def is_bent(lm_list):
         v2 = [lm_list[tip_id][1]-lm_list[joint_id][1],
               lm_list[tip_id][2]-lm_list[joint_id][2]]
         if get_angle(v1,v2) < DEGREE_THRESHOLD:
-            bent_list.append(False)
+            bent_list.append(0)
         else:
-            bent_list.append(True)
+            bent_list.append(1)
     return bent_list
 
 
@@ -52,6 +52,10 @@ while True:
     img = detector.find_hands(img)
     lm_list = detector.find_pos(img,text=True,draw=False)
     if len(lm_list)!=0:
+        fingers_bent = is_bent(lm_list)
+        if all(fingers_bent) == 1:
+            print('a')
+
 
 
     cv2.imshow('result', img)

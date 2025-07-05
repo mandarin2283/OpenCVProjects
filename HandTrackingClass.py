@@ -46,7 +46,7 @@ class HandDetector():
                     cv2.putText(img,str(id),(cx,cy),cv2.FONT_HERSHEY_PLAIN,
                                 1.5,(0,255,0),1)
                 if draw:
-                    cv2.circle(img,(cx,cy),7,(0,255,0),-1)
+                    cv2.circle(img,(cx,cy),10,(50,255,50),-1)
 
         return lm_list
 

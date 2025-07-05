@@ -30,7 +30,7 @@ class Button:
             cv2.rectangle(image, self.position,
                           (self.position[0] + self.width, self.position[1] + self.height),
                           (0, 0,), 3)
-            cv2.putText(image, self.value, (self.position[0] + 30, self.position[1] + 30),
+            cv2.putText(image, self.value, (self.position[0] + 30, self.position[1] + 45),
                         cv2.FONT_ITALIC,5,(0, 0, 0), 5)
             return True
         else:
@@ -43,17 +43,18 @@ cap.set(4,720)
 detector = htm.HandDetector()
 
 button_values = [
-    ['q','e','t'],
-    ['w','r','y'],
+    ['q','w','e','r','t','y','u','i','o','p'],
+    ['a','s','d','f','g','h','j','k','l','z'],
+    ['x','c','space','v','b','n','m','.',',','?'],
 ]
 
 my_equation = ''
 counter = 0
 
 button_list = []
-for x in range(3):
-    for y in range(2):
-        button = Button((x*100+300,y*100+300),
+for x in range(10):
+    for y in range(3):
+        button = Button((x*100+200,y*100+300),
                         100,100,button_values[y][x])
         button_list.append(button)
 
@@ -62,13 +63,14 @@ while True:
     suc, img = cap.read()
     img = cv2.flip(img,1)
     img = detector.find_hands(img)
-    lm_list = detector.find_pos(img)
 
-    cv2.rectangle(img,(300,220),(600,300),(255,255,255),-1)
-    cv2.rectangle(img, (300, 250), (600, 300), (0,0,0), 4)
+    cv2.rectangle(img,(200,220),(1200,300),(255,255,255),-1)
+    cv2.rectangle(img, (200, 220), (1200, 300), (0,0,0), 4)
 
     for button in button_list:
         button.draw(img)
+
+    lm_list = detector.find_pos(img,draw=True)
 
     if len(lm_list)!=0:
         length = detector.find_distance(lm_list[8][1:],lm_list[12][1:])
@@ -85,7 +87,7 @@ while True:
         if counter > 10:
             counter = 0
 
-    cv2.putText(img, my_equation,(315,270),cv2.FONT_ITALIC,3,
+    cv2.putText(img, my_equation,(215,270),cv2.FONT_ITALIC,3,
                 (0,0,0),2)
 
     cv2.imshow('result', img)

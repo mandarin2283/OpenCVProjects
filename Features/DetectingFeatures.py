@@ -2,8 +2,8 @@ import cv2
 import numpy as np
 
 
-img1 = cv2.imread('images/ps1.jpg',0)
-img2 = cv2.imread('images/ps2.jpg',0)
+img1 = cv2.imread('../images/ps1.jpg', 0)
+img2 = cv2.imread('../images/ps2.jpg', 0)
 img1 = cv2.resize(img1,(500,400))
 img2 = cv2.resize(img2,(500,400))
 

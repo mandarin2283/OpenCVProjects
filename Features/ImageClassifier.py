@@ -6,7 +6,7 @@ import numpy as np
 
 orb = cv2.ORB_create(nfeatures=1000)
 
-path = 'images'
+path = '../images'
 images = []
 class_names = []
 my_list = os.listdir(path)

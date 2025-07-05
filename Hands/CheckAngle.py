@@ -1,10 +1,9 @@
 import time
 
 import cv2
-import mediapipe as mp
 import numpy as np
 
-import HandTrackingClass as htm
+from Hands import HandTrackingClass as htm
 
 WEIDTH_CAMERA, HEIGHT_CAMERA = 640, 480
 DEGREE_THRESHOLD = 45

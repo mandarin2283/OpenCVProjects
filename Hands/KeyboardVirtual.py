@@ -92,5 +92,8 @@ while True:
 
     cv2.imshow('result', img)
 
-    if cv2.waitKey(1) & 0xFF == ord('q'):
+    key = cv2.waitKey(1)
+    if key == ord('q'):
         break
+    elif key == ord('w'):
+        my_equation = ''

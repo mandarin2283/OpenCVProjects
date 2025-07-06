@@ -81,7 +81,7 @@ while True:
         if length<50:
             for i,button in enumerate(button_list):
                 if button.click(x,y,img) and counter==0:
-                    my_value = button_values[int(i%4)][int(i/4)]
+                    my_value = button.value
                     if my_value=='=':
                         my_equation = str(eval(my_equation))
                     else:

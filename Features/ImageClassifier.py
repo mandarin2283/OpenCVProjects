@@ -29,6 +29,7 @@ def find_id(img,des_list):
     kp2,des2 = orb.detectAndCompute(img,None)
     bf = cv2.BFMatcher()
     match_list = []
+    final_value = -1
     for des in des_list:
         matches = bf.knnMatch(des, des2, k=2)
         good = []

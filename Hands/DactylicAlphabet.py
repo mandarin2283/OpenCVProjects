@@ -46,16 +46,37 @@ def is_bent(lm_list):
     return bent_list
 
 
+def main_dot(lm_list):
+    x1,y1 = lm_list[0][1:]
+    x2,y2 = lm_list[9][1:]
+    cx,cy = (x1+x2)//2,(y1+y2)//2
+    return cx,cy
+
+
+def dir_hand(dot,lm_list):
+    dir_dot = lm_list[9][1:]
+    vector = np.array(dir_dot) - np.array(dot)
+    vx,vy = vector
+    module = abs(vector)
+    if module[0] > module[1]:
+        if vx > 0:
+            return 'right'
+        elif vx < 0:
+            return 'left'
+    elif module[0] < module[1]:
+        if vy > 0:
+            return 'down'
+        elif vy < 0:
+            return 'up'
+
+
 while True:
     suc, img = cap.read()
     img = cv2.flip(img,1)
     img = detector.find_hands(img)
     lm_list = detector.find_pos(img,text=True,draw=False)
     if len(lm_list)!=0:
-        fingers_bent = is_bent(lm_list)
-        if all(fingers_bent) == 1:
-            print('a')
-
+        pass
 
 
     cv2.imshow('result', img)

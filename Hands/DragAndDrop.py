@@ -27,18 +27,20 @@ class Shape:
 cap = cv2.VideoCapture(0)
 detector = htm.HandDetector()
 
+shape = Shape((200,200),(150,150))
+
 while True:
     suc, img = cap.read()
+    img = cv2.flip(img,1)
     img = detector.find_hands(img)
 
-    shape = Shape((200,200),(100,100))
     shape.draw(img)
 
     lm_list = detector.find_pos(img)
     if len(lm_list)!=0:
         length = detector.find_distance(lm_list[8][1:],lm_list[12][1:])
         cursor = lm_list[8][1:]
-        if length<100:
+        if length<50:
             shape.update(cursor)
 
     cv2.imshow('result', img)

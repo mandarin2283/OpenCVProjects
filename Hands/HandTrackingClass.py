@@ -25,12 +25,15 @@ class HandDetector():
     def find_hands(self,img,draw=True):
         imgRGB = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
         self.results = self.hands.process(imgRGB)
+        hand_side = None
 
         if self.results.multi_hand_landmarks:
             for hand_landmarks in self.results.multi_hand_landmarks:
                 if draw:
                     self.mpDraw.draw_landmarks(img, hand_landmarks,
                                                self.mpHands.HAND_CONNECTIONS)
+                #hand_side = self.results.
+
         return img
 
     def find_pos(self,img,hand_no=0,draw=True,text=False):
@@ -50,6 +53,17 @@ class HandDetector():
                     cv2.circle(img,(cx,cy),10,(50,255,50),-1)
 
         return lm_list
+
+    def find_handedness(self,img,pos,draw=True):
+        if self.results.multi_handedness:
+            handedness = self.results.multi_handedness[0]
+            label = handedness.classification[0].label
+
+            if draw:
+                cv2.putText(img,label,pos,cv2.FONT_ITALIC,2,
+                            (255,0,0),1)
+
+            return label
 
     def is_bent(self,lm_list):
         tip_ids = [4, 8, 12, 16, 20]
@@ -119,8 +133,11 @@ def main():
 
     while True:
         suc, img = cap.read()
+        img = cv2.flip(img,1)
         img = detector.find_hands(img)
         lm_list = detector.find_pos(img)
+        if len(lm_list)!=0:
+            hand_side = detector.find_handedness(img,lm_list[1][1:])
 
         cur_time = time.time()
         fps = 1/(cur_time-prev_time)

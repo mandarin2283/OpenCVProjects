@@ -10,11 +10,16 @@ class Shape:
         self.center_position = center_position
 
     def draw(self,image):
-        cv2.rectangle(image, (self.center_position[0] - self.size[0] // 2,
+        alpha = 0.5
+        beta = 1 - alpha
+        over = image.copy()
+        cv2.rectangle(over, (self.center_position[0] - self.size[0] // 2,
                               self.center_position[1] - self.size[1] // 2),
                       (self.center_position[0] + self.size[0] // 2,
                        self.center_position[1] + self.size[1] // 2),
                       (200,100,80),-1)
+        cv2.addWeighted(over,alpha,image,beta,0.0,image)
+
 
     def update(self,cursor):
         cx,cy = self.center_position

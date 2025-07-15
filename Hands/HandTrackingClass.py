@@ -6,7 +6,6 @@ import mediapipe as mp
 import numpy as np
 
 
-
 class HandDetector():
 
     def __init__(self,mode=False,max_hands=2,complexity=1,

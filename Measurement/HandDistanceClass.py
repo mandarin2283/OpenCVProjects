@@ -19,14 +19,16 @@ class HandDistance:
         return distance_cm
 
     def display(self,image,lm_list):
+        distance = self.get_distance(lm_list)
         bound_box = self.detector.bound_box(image, lm_list)
         x1, y1 = bound_box[1], bound_box[3]
         x2, y2 = bound_box[0], y1 - 50
         cv2.rectangle(image, (x1, y1), (x2, y2),
                       (0, 0, 255), -1)
-        cv2.putText(image, f"{int(self.get_distance(lm_list))} cm",
+        cv2.putText(image, f"{int(distance)} cm",
                     (x1, y1), cv2.FONT_HERSHEY_PLAIN,
                     3, (255, 255, 255), 3)
+        return distance,bound_box
 
 def main():
     cap = cv2.VideoCapture(0)

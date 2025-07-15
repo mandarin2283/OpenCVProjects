@@ -54,15 +54,15 @@ class HandDetector():
 
         return lm_list
 
-    def find_handedness(self,img,pos,draw=True):
+    def find_handedness(self,image,lm_list,draw=True):
         if self.results.multi_handedness:
             handedness = self.results.multi_handedness[0]
             label = handedness.classification[0].label
 
             if draw:
-                cv2.putText(img,label,pos,cv2.FONT_ITALIC,2,
-                            (255,0,0),1)
-
+                x,y = lm_list[8][1],lm_list[8][2] - 50
+                cv2.putText(image,label,(x,y),cv2.FONT_ITALIC,2,
+                            (0,0,255),1)
             return label
 
     def is_bent(self,lm_list):
@@ -113,6 +113,18 @@ class HandDetector():
             elif vy < 0:
                 return 'up'
 
+    def bound_box(self,image,lm_list):
+        x_list = []
+        y_list = []
+        for lm in lm_list:
+            x_list.append(int(lm[1]))
+            y_list.append(int(lm[2]))
+        x_max,x_min = max(x_list),min(x_list)
+        y_max, y_min = max(y_list),min(y_list)
+        cv2.rectangle(image,(x_min,y_min),(x_max,y_max),
+                      (0,0,255),3)
+        return (x_max,x_min,y_max,y_min)
+
     @staticmethod
     def get_angle(v1, v2):
         v1 = np.array(v1)
@@ -137,7 +149,7 @@ def main():
         img = detector.find_hands(img)
         lm_list = detector.find_pos(img)
         if len(lm_list)!=0:
-            hand_side = detector.find_handedness(img,lm_list[1][1:])
+            pass
 
         cur_time = time.time()
         fps = 1/(cur_time-prev_time)

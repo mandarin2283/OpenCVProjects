@@ -31,7 +31,6 @@ class HandDetector():
                 if draw:
                     self.mpDraw.draw_landmarks(img, hand_landmarks,
                                                self.mpHands.HAND_CONNECTIONS)
-                #hand_side = self.results.
 
         return img
 
@@ -52,6 +51,19 @@ class HandDetector():
                     cv2.circle(img,(cx,cy),10,(50,255,50),-1)
 
         return lm_list
+
+    def find_pos_two(self,img,draw=True):
+        all_lm_list = []
+
+        if self.results.multi_hand_landmarks:
+            for hand_no,hand_landmarks in enumerate(self.results.multi_hand_landmarks):
+                for id, lm in enumerate(hand_landmarks.landmark):
+                    h, w, c = img.shape
+                    cx, cy = int(lm.x * w), int(lm.y * h)
+                    all_lm_list.append([id, cx, cy])
+                    if draw:
+                        cv2.circle(img, (cx, cy), 10, (50, 255, 50), -1)
+        return all_lm_list
 
     def find_handedness(self,image,lm_list,draw=True):
         if self.results.multi_handedness:

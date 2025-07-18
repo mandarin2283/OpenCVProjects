@@ -1,7 +1,7 @@
 import cv2
 import utils
 
-path = '5460877220252875051.jpg'
+path = 'cards.jpg'
 
 cap = cv2.VideoCapture(1)
 cap.set(10,160)
@@ -24,8 +24,12 @@ while True:
         biggest = final_contours[0][2]
         img_warp = utils.warp_image(img,biggest,w,h)
         img_cont2, final_contours2 = utils.get_contours(img_warp,filter_threshold=4,
-                                                        min_area=3000,threshold=[30,30],show=True)
-        #cv2.imshow('res',img_cont2)
+                                                        min_area=3000,threshold=[30,30])
+
+        if len(final_contours2)!=0:
+            for dot in final_contours2:
+                cv2.polylines(img_cont2,[dot[2]],True,(0,0,255),2)
+        cv2.imshow('res', img_cont2)
 
     #cv2.imshow('result', img)
 

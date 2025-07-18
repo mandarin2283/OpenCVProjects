@@ -3,7 +3,7 @@ import numpy as np
 
 
 def get_contours(image,threshold=[100,100],min_area=1000,
-                 filter_threshold=0,draw=True,show=False):
+                 filter_threshold=0,draw=False,show=False):
     image_gray = cv2.cvtColor(image,cv2.COLOR_BGR2GRAY)
     image_blur = cv2.GaussianBlur(image_gray,[5,5],1)
     image_canny = cv2.Canny(image_blur,threshold[0],threshold[1])

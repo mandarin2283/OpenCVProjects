@@ -46,7 +46,6 @@ def reorder(points):
     return new_points
 
 
-
 def warp_image(image,points,w,h,pad=20):
     points = reorder(points)
     pts1 = np.float32(points)
@@ -55,3 +54,7 @@ def warp_image(image,points,w,h,pad=20):
     image_warp = cv2.warpPerspective(image,matrix,(w,h))
     image_warp = image_warp[pad:image_warp.shape[0]-pad,pad:image_warp.shape[1]-pad]
     return image_warp
+
+
+def find_distance(dot1,dot2):
+    return np.sqrt(np.sum(np.square(dot1,dot2)))

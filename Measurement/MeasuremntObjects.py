@@ -29,6 +29,24 @@ while True:
         if len(final_contours2)!=0:
             for dot in final_contours2:
                 cv2.polylines(img_cont2,[dot[2]],True,(0,0,255),2)
+
+                new_points = utils.reorder(dot[2])
+                width = round((utils.find_distance(new_points[0][0]//scale,new_points[[1][0]]//scale)/10),1)
+                height = round((utils.find_distance(new_points[0][0]//scale,new_points[[2][0]]//scale)/10),1)
+
+        cv2.arrowedLine(img_cont2,(new_points[0][0][0],new_points[0][0][1]),
+                       (new_points[1][0][0],new_points[1][0][1]),
+                      (0,0,255),3,8,0,0.05)
+        cv2.arrowedLine(img_cont2,(new_points[0][0][0],new_points[0][0][1]),
+                     (new_points[2][0][0],new_points[2][0][1]),
+                    (0,0,255),3,8,0,0.05)
+        x,y,w_dot,h_dot = dot[3]
+        cv2.putText(img_cont2, '{}cm'.format(width), (x + 30, y - 10),
+                  cv2.FONT_HERSHEY_COMPLEX_SMALL, 1.5,
+                 (255, 0, 255), 2)
+        cv2.putText(img_cont2, '{}cm'.format(height), (x - 70, y + h_dot // 2),
+                  cv2.FONT_HERSHEY_COMPLEX_SMALL, 1.5,
+                 (255, 0, 255), 2)
         cv2.imshow('res', img_cont2)
 
     #cv2.imshow('result', img)

@@ -1,38 +1,24 @@
 import cv2
 import mediapipe as mp
-from mediapipe import tasks
-from mediapipe.tasks.python import vision
 
 
-model_path = 'face_landmarker.task'
-
-base_opt = tasks.BaseOptions(model_asset_path=model_path)
-face_landmarker = vision.FaceLandmarker
-face_land_opt = vision.FaceLandmarkerOptions
-face_land_res = vision.FaceLandmarkerResult
-vision_running_mode = vision.RunningMode
-
-
-def return_result(result: face_land_res, output_image: mp.Image, timestamp_ms: int):
-    return 'face landmarker result: {}'.format(result)
-
-
-options = face_land_opt(base_options=base_opt,
-                        running_mode=vision_running_mode.LIVE_STREAM,
-                        result_callback=return_result
-                        )
-detector = vision.FaceLandmarker.create_from_options(options)
+face_mesh = mp.solutions.face_mesh.FaceMesh()
 
 cap = cv2.VideoCapture(0)
 
 while True:
     suc, img = cap.read()
     img = cv2.flip(img, 1)
-    mp_img = mp.Image(image_format=mp.ImageFormat.SRGB,
-                      data=img)
+    img_rgb = cv2.cvtColor(img,cv2.COLOR_BGR2RGB)
+    results = face_mesh.process(img_rgb)
 
-    timems = int(cap.get(cv2.CAP_PROP_POS_MSEC))
-    detector.detect_async(mp_img,timems)
+    if results.multi_face_landmarks:
+        for face_landmarks in results.multi_face_landmarks:
+            for lm in face_landmarks.landmark:
+                h,w,_ = img.shape
+                cx,cy = int(lm.x * w),int(lm.y * h)
+                cv2.circle(img,(cx,cy),7,
+                           (200,10,75),-1)
 
     cv2.imshow('result', img)
 

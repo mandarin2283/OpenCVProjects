@@ -32,6 +32,8 @@ class HandDistance:
 
 def main():
     cap = cv2.VideoCapture(0)
+    cap.set(3, 1280)
+    cap.set(4, 720)
     detector = HandDetector()
     distance_measurement = HandDistance(detector)
 

@@ -96,12 +96,6 @@ class HandDetector():
                 bent_list.append(1)
         return bent_list
 
-    def find_distance(self,p1,p2):
-        x1,y1 = p1
-        x2,y2 = p2
-        length = math.hypot(x2-x1,y2-y1)
-        return length
-
     def main_dot(self,lm_list):
         x1, y1 = lm_list[0][1:]
         x2, y2 = lm_list[9][1:]
@@ -135,6 +129,13 @@ class HandDetector():
         cv2.rectangle(image,(x_min,y_min),(x_max,y_max),
                       (0,0,255),3)
         return (x_max,x_min,y_max,y_min)
+
+    @staticmethod
+    def find_distance(self,p1,p2):
+        x1,y1 = p1
+        x2,y2 = p2
+        length = math.hypot(x2-x1,y2-y1)
+        return length
 
     @staticmethod
     def get_angle(v1, v2):
